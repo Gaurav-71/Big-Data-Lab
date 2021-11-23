@@ -1,0 +1,14 @@
+gedit $HADOOP_HOME/etc/hadoop/hadoop-env.sh
+export JAVA_HOME=/usr/lib/jvm/default-java
+
+export CLASSPATH="$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-client-common-3.2.2.jar:$HADOOP_HOME/share/hadoop/mapreduce/hadoop-mapreduce-client-core-3.2.2.jar:$HADOOP_HOME/share/hadoop/common/hadoop-common-3.2.2.jar"
+
+javac -d . *.java
+
+echo Main-Class: package.driver > Manifest.txt
+
+jar cfm jarname.jar Manifest.txt packageFolder/*.class
+
+$HADOOP_HOME/bin/hadoop jar jarname.jar inputfile output
+
+cat output/*
