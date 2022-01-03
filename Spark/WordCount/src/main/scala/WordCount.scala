@@ -3,7 +3,7 @@ import org.apache.spark.rdd.RDD
 
 object WordCount {
   def main(args: Array[String]) {
-    val file = "src/main/words.txts"
+    val file = "src/main/words.txt"
     val spark: SparkSession = SparkSession.builder
       .appName("Word Count")
       .config("spark.master", "local")
