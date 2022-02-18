@@ -1,2 +1,1 @@
-Main-Class: avg.driver
-
+Main-Class: average.driver

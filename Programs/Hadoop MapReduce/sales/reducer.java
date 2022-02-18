@@ -1,51 +1,19 @@
 package sales;
 
+import java.io.*;
+import java.util.*;
 
-import java.io.IOException;
-import java.util.StringTokenizer;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.*;
-import org.apache.hadoop.mapreduce.Job;
-import org.apache.hadoop.mapreduce.Mapper;
-import org.apache.hadoop.mapreduce.Reducer;
-import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
-import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.mapred.*;
 
-
-public class reducer extends Reducer<Text,IntWritable,Text,IntWritable> {
-    // private IntWritable result = new IntWritable();
-
-    public void reduce(Text key, Iterable<IntWritable> values,
-                    Context context
-                    ) throws IOException, InterruptedException {
-        // int sum = 0;
-        // for (IntWritable val : values) {
-        //     sum += val.get();
-        // }
-        // result.set(sum);
-        // context.write(key, result);
-        String temp = key.toString();
-        if(temp.substring(0, 9) == "_country_"){
-            int total_sales = 0;
-            for(IntWritable val: values){
-                total_sales+=val.get();
-            }
-            context.write(key, new IntWritable(total_sales));
-        } else{
-            int payment_freq = 0;
-            for(IntWritable val: values){
-                payment_freq+=val.get();
-            }
-            context.write(key, new IntWritable(payment_freq));
+public class reducer extends MapReduceBase implements Reducer<Text, IntWritable, Text, IntWritable>{
+    public void reduce(Text arg0, Iterator<IntWritable> arg1, OutputCollector<Text, IntWritable> arg2, Reporter r) throws IOException {
+        int sum =0;
+        while(arg1.hasNext()){
+            int value = arg1.next().get();
+            sum += value;
         }
-        // int cnt = 0;
-        // for(IntWritable val: values){
-        //     cnt++;
-        // }
-        // context.write(key, new IntWritable(cnt));
+        arg2.collect(arg0, new IntWritable(sum));
     }
 }
